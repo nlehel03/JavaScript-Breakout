@@ -1,0 +1,47 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: grey;
+}
+.gameWindow {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  background-color: black;
+  border: 10px solid yellow;
+}
+.board {
+  width: 150px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 80%;
+  background-color: red;
+}
+.ball {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70%;
+  z-index: 100;
+}
+
+.bricks {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  top: 10%;
+  width: 100%;
+  height: 40%;
+}
+.brick {
+  width: 2.5%;
+  height: 10%;
+}
