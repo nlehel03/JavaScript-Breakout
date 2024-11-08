@@ -46,3 +46,13 @@ body {
   width: 2.5%;
   height: 10%;
 }
+.PointsLives{
+  
+  color:white;
+  width: 20%;
+  position: absolute;
+  top: 4%;
+  left: 75%;
+  z-index: 1000;
+  font-size: xx-large;
+}

@@ -1,5 +1,8 @@
 let board;
 let ball;
+let brickList = [];
+let lives = 3;
+let point = 0;
 const border = 0.7;
 window.onload = function () {
   board = {
@@ -7,12 +10,14 @@ window.onload = function () {
     x: 50,
     width: 10,
     height: 4,
-    speed: 2,
+    speed: 3,
   };
   ball = {
     element: document.getElementById("labda"),
-    xSpeed: 0.4,
-    ySpeed: 0.4,
+    xSpeed: 0.3,
+    ySpeed: 0.3,
+    xAlap: 50,
+    yAlap: 80,
     x: 50,
     y: 80,
   };
@@ -20,6 +25,7 @@ window.onload = function () {
   initializeBricks();
   requestAnimationFrame(update);
   document.addEventListener("keydown", boardMove);
+  pointsLivesUpdate();
 };
 function initializeBricks() {
   const bricksContainer = document.querySelector(".Bricks");
@@ -40,6 +46,7 @@ function initializeBricks() {
       } else if (i < 10) {
         b.style.backgroundColor = "#0080FF";
       }
+      brickList.push(b);
       b.classList.add("Brick");
       bricksContainer.appendChild(b);
     }
@@ -51,6 +58,8 @@ function update() {
   ball.element.style.top = `${ball.y}%`;
   requestAnimationFrame(update);
   ballMove();
+  ballFall();
+  pointsLivesUpdate();
 }
 
 function boardMove(e) {
@@ -88,23 +97,79 @@ async function collisionCheck() {
 
   if (
     ballRect.bottom >= boardRect.top &&
-    //ballRect.top <= boardRect.bottom &&
     ballRect.right >= boardRect.left &&
     ballRect.left <= boardRect.right
   ) {
     ball.ySpeed *= -1;
     ball.y -= 1;
   }
-  for (let b of bricks) {
+  for (let b of brickList) {
     const brickRect = b.getBoundingClientRect();
-    if (ballRect.top <= brickRect.bottom || ballRect.bottom >= brickRect.top) {
-      ball.ySpeed *= -1;
+
+    if (
+      ballRect.bottom >= brickRect.top &&
+      ballRect.right >= brickRect.left &&
+      ballRect.left <= brickRect.right &&
+      ballRect.top <= brickRect.bottom &&
+      b.style.visibility != "hidden"
+    ) {
+      const collisionFromTop = Math.abs(ballRect.bottom - brickRect.top);
+      const collisionFromBottom = Math.abs(ballRect.top - brickRect.bottom);
+      const collisionFromLeft = Math.abs(ballRect.right - brickRect.left);
+      const collisionFromRight = Math.abs(ballRect.left - brickRect.right);
+
+      const minCollision = Math.min(
+        collisionFromTop,
+        collisionFromBottom,
+        collisionFromLeft,
+        collisionFromRight
+      );
+
+      if (minCollision === collisionFromTop) {
+        ball.ySpeed *= -1;
+        ball.y -= 1;
+      } else if (minCollision === collisionFromBottom) {
+        ball.ySpeed *= -1;
+        ball.y += 1;
+      } else if (minCollision === collisionFromLeft) {
+        ball.xSpeed *= -1;
+        ball.x -= 1;
+      } else if (minCollision === collisionFromRight) {
+        ball.xSpeed *= -1;
+        ball.x += 1;
+      }
       b.style.backgroundColor = "white";
       await delay(100);
-      b.parentNode.removeChild(b);
-    }
-    if (ballRect.right >= brickRect.left || ballRect.left <= brickRect.right) {
-      ball.xSpeed *= -1;
+      b.style.visibility = "hidden";
+      point += 1;
+      //b.parentNode.removeChild(b);
+      //brickList = brickList.filter((brick) => brick !== b);
+      break;
     }
   }
+}
+
+function ballFall() {
+  if (ball.y >= 95) {
+    let z = Math.floor(Math.random() * 2);
+    if (z == 1) {
+      ball.xSpeed *= -1;
+    }
+
+    ball.x = ball.xAlap;
+    ball.y = ball.yAlap;
+    ball.ySpeed *= -1;
+    lives -= 1;
+  }
+}
+
+function pointsLivesUpdate() {
+  const pointsLives = document.querySelector(".PointsLives");
+  //pointsLives.innerHTML = "Points:" + point + "<br>Lives:" + lives;
+  if (pointsLives) {
+    pointsLives.innerHTML = "Points: " + point + "<br>Lives: " + lives;
+  } else {
+    console.error("A .PointsLives elem nem található!");
+  }
+
 }
