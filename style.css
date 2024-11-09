@@ -12,40 +12,17 @@ body {
   height: 720px;
   background-color: black;
   border: 10px solid yellow;
-}
-.Board {
-  width: 10%;
-  height: 4%;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 90%;
-  background-color: red;
-}
-.Ball {
-  width: 1.5625%;
-  aspect-ratio: 1/1;
-  /*height: 2.778%;*/
-  background-color: white;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 80%;
-  z-index: 100;
+  z-index: 1;
 }
 
-.Bricks {
+/*.Bricks {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
   top: 10%;
   width: 100%;
   height: 40%;
-}
-.Brick {
-  width: 2.5%;
-  height: 10%;
-}
+}*/
 .PointsLives{
   
   color:white;
@@ -53,6 +30,27 @@ body {
   position: absolute;
   top: 4%;
   left: 75%;
-  z-index: 1000;
+  z-index: 100;
   font-size: xx-large;
+}
+#gameOver{
+  position: absolute;
+  width: 40%;
+  height: 80%;
+  top: 10%;
+  left: 30%;
+  display:none;
+  visibility: visible;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  z-index: 1000;
+  justify-content: center;
+}
+#gameOverh1{
+  text-align: center;
+}
+#gameCanvas{
+  width: 100%;
+  height: 100%;
 }

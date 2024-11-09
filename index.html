@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="game.js" defer></script>
-    <script src="ball.js" defer></script>
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
   <body>
     <div class="gameWindow">
-      <div class="PointsLives">ycYCYCYx</div>
-      <div class="Bricks"></div>
-      <div class="Ball" id="labda"></div>
-      <div class="Board" id="deszka"></div>
+      <canvas id="gameCanvas" width="1280" height="720"></canvas>
+      <div class="PointsLives">Points: 0<br>Lives: 3</div>
+      <div id="gameOver">
+        <h1 id="gameOverh1">Game Over</h1>
+      </div>
     </div>
+    
+    
   </body>
 </html>
