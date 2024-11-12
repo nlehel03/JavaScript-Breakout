@@ -10,9 +10,11 @@
   <body>
     <div class="gameWindow">
       <canvas id="gameCanvas" width="1280" height="720"></canvas>
-      <div class="PointsLives">Points: 0<br>Lives: 3</div>
+      <div class="ScoresLives">Scores: 0<br>Lives: 3</div>
       <div id="gameOver">
         <h1 id="gameOverh1">Game Over</h1>
+        <p id="gameOverScoreText">Your Score:</p>
+        <button id="restartButton" onclick="restartGame()">Restart</button>
       </div>
     </div>
     

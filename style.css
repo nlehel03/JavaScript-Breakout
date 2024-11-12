@@ -23,9 +23,8 @@ body {
   width: 100%;
   height: 40%;
 }*/
-.PointsLives{
-  
-  color:white;
+.ScoresLives {
+  color: white;
   width: 20%;
   position: absolute;
   top: 4%;
@@ -33,13 +32,13 @@ body {
   z-index: 100;
   font-size: xx-large;
 }
-#gameOver{
+#gameOver {
   position: absolute;
   width: 40%;
   height: 80%;
   top: 10%;
   left: 30%;
-  display:none;
+  display: none;
   visibility: visible;
   background-color: black;
   color: white;
@@ -47,10 +46,29 @@ body {
   z-index: 1000;
   justify-content: center;
 }
-#gameOverh1{
+#gameOverh1 {
+  position: absolute;
   text-align: center;
+  top: 10%;
 }
-#gameCanvas{
+#restartButton {
+  position: absolute;
+  width: 50%;
+  height: 10%;
+  top: 50%;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  font-size: large;
+}
+#gameOverScoreText {
+  position: absolute;
+  text-align: center;
+  top: 25%;
+  font-size: large;
+}
+#gameCanvas {
   width: 100%;
   height: 100%;
 }
