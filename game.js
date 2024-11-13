@@ -10,14 +10,33 @@ class Ball {
     this.width = w;
     this.xSpeed = s;
     this.ySpeed = s;
+    this.touchCount = 0;
+    this.fillColor = "white";
+    this.tail = [];
   }
   draw(context) {
+    if (ballBoosted) {
+      this.tail.forEach((part, i) => {
+        const a = 1 - i / this.tail.length;
+        context.fillStyle = `rgba(255, 255, 0, ${a})`;
+        context.fillRect(part.x, part.y, this.width, this.height);
+      });
+    }
     context.beginPath();
-    context.fillStyle = "white";
+    context.fillStyle = this.fillColor;
     context.fillRect(this.x, this.y, this.width, this.height);
     context.closePath();
   }
   move() {
+    if (ballBoosted) {
+      this.tail.unshift({ x: this.x, y: this.y });
+
+      if (this.tail.length > 10) {
+        this.tail.pop();
+      }
+    } else {
+      this.tail = [];
+    }
     this.x += this.xSpeed;
     this.y -= this.ySpeed;
     if (this.x >= 1280 - border || this.x <= 0 + border) {
@@ -60,7 +79,7 @@ class Board {
       this.x -= this.speed;
     } else if (e.code == "ArrowRight" && this.x < 1122) {
       this.x += this.speed;
-      console.log(this.x);
+      //console.log(this.x);
     }
   }
 }
@@ -76,20 +95,24 @@ class Brick {
   draw(context) {
     if (this.exist == true) {
       let color;
-      if (this.line < 1) {
-        color = "red";
-      } else if (this.line < 2) {
-        color = "orange";
-      } else if (this.line < 3) {
-        color = "yellow";
-      } else if (this.line < 4) {
-        color = "#33FF33";
-      } else if (this.line < 5) {
-        color = "skyblue";
-      } else if (this.line < 6) {
-        color = "#0080FF";
-      } else if (this.line < 7) {
-        color = "purple";
+      if (turboBricks.includes(this)) {
+        color = "turquoise";
+      } else {
+        if (this.line < 1) {
+          color = "red";
+        } else if (this.line < 2) {
+          color = "orange";
+        } else if (this.line < 3) {
+          color = "yellow";
+        } else if (this.line < 4) {
+          color = "#33FF33";
+        } else if (this.line < 5) {
+          color = "skyblue";
+        } else if (this.line < 6) {
+          color = "#0080FF";
+        } else if (this.line < 7) {
+          color = "purple";
+        }
       }
       context.fillStyle = color;
       context.strokeStyle = color;
@@ -99,12 +122,10 @@ class Brick {
     }
   }
 }
-
 let brickArray = [];
 let lives = 3;
 let score = 0;
 const border = 10;
-let pass = false;
 let animationFrameId;
 let go;
 let canvas;
@@ -113,28 +134,36 @@ let canvasWidth;
 let canvasHeight;
 let ball;
 let board;
+let menu;
+
 window.onload = function () {
-  pass = true;
+  menu = document.getElementById("menu");
+  menu.style.display = "flex";
   canvas = document.getElementById("gameCanvas");
   context = canvas.getContext("2d");
-  canvasWidth = canvas.width;
-  canvasHeight = canvas.height;
-  ball = new Ball(640, 504, 20, 20, 2);
+  canvasWidth = 1280;
+  canvasHeight = 720;
+  ball = new Ball(640, 504, 20, 20, 3);
   board = new Board(640, 150, 50, 21);
   createBrickContainer();
+  randomBrick(10);
   drawBricks();
+
+  go = document.getElementById("gameOver");
+};
+function startGame() {
+  menu.style.display = "none";
   requestAnimationFrame(update);
   document.addEventListener("keydown", (e) => board.move(e));
   scoresLivesUpdate();
-  go = document.getElementById("gameOver");
-};
+}
 
 function createBrickContainer() {
   const rows = 7;
-  const cols = 40;
+  const cols = 30;
   let startY = canvasHeight * 0.1;
   let endY = canvasHeight * 0.5;
-  const brickWidth = canvasWidth / cols + 10;
+  const brickWidth = canvasWidth / cols;
   const brickHeight = (endY - startY) / rows;
   const maxRows = (endY - startY) / brickHeight;
 
@@ -153,6 +182,19 @@ function drawBricks() {
   });
 }
 
+let turboBricks = [];
+
+function randomBrick(n) {
+  turboBricks = [];
+  while (turboBricks.length < n) {
+    let ri = Math.floor(Math.random() * brickArray.length);
+    let brick = brickArray[ri];
+    if (!turboBricks.includes(brick)) {
+      turboBricks.push(brick);
+    }
+  }
+}
+
 function update() {
   context.clearRect(0, 0, canvasWidth, canvasHeight);
   board.draw(context);
@@ -168,6 +210,9 @@ function update() {
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+let ballBoosted = false;
+let ballBoostTime = null;
 
 async function collisionCheck() {
   const ballLeft = ball.x;
@@ -185,6 +230,23 @@ async function collisionCheck() {
   ) {
     ball.ySpeed *= -1;
     ball.y -= 1;
+
+    if (ball.touchCount == 10) {
+      if (ball.xSpeed > 0) {
+        ball.xSpeed += 0.2;
+      } else {
+        ball.xSpeed -= 0.2;
+      }
+      if (ball.ySpeed > 0) {
+        ball.ySpeed += 0.2;
+      } else {
+        ball.ySpeed -= 0.2;
+      }
+      ball.touchCount = 0;
+    } else {
+      ball.touchCount += 1;
+    }
+    console.log(ball.touchCount + " " + ball.xSpeed);
   }
   for (let b of brickArray) {
     const brickLeft = b.x;
@@ -197,49 +259,69 @@ async function collisionCheck() {
       ballLeft <= brickRight &&
       ballTop <= brickBottom &&
       b.exist == true
-    ) {ameId = null;
-      score = 0;
-      lives = 3;
-      ball = new Ball(640, 504, 20, 20, 2);
-      board = new Board(640, 150, 50, 21);
-      ball.xS
-      const collisionFromTop = Math.abs(ballBottom - brickTop);
-      const collisionFromBottom = Math.abs(ballTop - brickBottom);
-      const collisionFromLeft = Math.abs(ballRight - brickLeft);
-      const collisionFromRight = Math.abs(ballLeft - brickRight);
+    ) {
+      if (turboBricks.includes(b)) {
+        activeBoost();
+      }
 
-      const minCollision = Math.min(
-        collisionFromTop,
-        collisionFromBottom,
-        collisionFromLeft,
-        collisionFromRight
-      );
+      if (!ballBoosted) {
+        const collisionFromTop = Math.abs(ballBottom - brickTop);
+        const collisionFromBottom = Math.abs(ballTop - brickBottom);
+        const collisionFromLeft = Math.abs(ballRight - brickLeft);
+        const collisionFromRight = Math.abs(ballLeft - brickRight);
 
-      if (minCollision === collisionFromTop) {
-        ball.ySpeed *= -1;
-        ball.y -= 1;
-      } else if (minCollision === collisionFromBottom) {
-        ball.ySpeed *= -1;
-        ball.y += 1;
-      } else if (minCollision === collisionFromLeft) {
-        ball.xSpeed *= -1;
-        ball.x -= 1;
-      } else if (minCollision === collisionFromRight) {
-        ball.xSpeed *= -1;
-        ball.x += 1;
+        const minCollision = Math.min(
+          collisionFromTop,
+          collisionFromBottom,
+          collisionFromLeft,
+          collisionFromRight
+        );
+
+        if (minCollision === collisionFromTop) {
+          ball.ySpeed *= -1;
+          ball.y -= 1;
+        } else if (minCollision === collisionFromBottom) {
+          ball.ySpeed *= -1;
+          ball.y += 1;
+        } else if (minCollision === collisionFromLeft) {
+          ball.xSpeed *= -1;
+          ball.x -= 1;
+        } else if (minCollision === collisionFromRight) {
+          ball.xSpeed *= -1;
+          ball.x += 1;
+        }
       }
       context.clearRect(b.x, b.y, b.width, b.height);
-      context.fillStyle = "white";
+      brickArray.splice(brickArray.indexOf(b), 1);
+      color = "white";
+      context.fillStyle = color;
+      context.strokeStyle = color;
+      context.lineWidth = 2;
+      context.strokeRect(b.x, b.y, b.width, b.height);
       context.fillRect(b.x, b.y, b.width, b.height);
-      await delay(100);
-      context.clearRect(b.x, b.y, b.width, b.height);
       b.exist = false;
       score += 1;
+      await delay(2800);
       break;
     }
   }
 }
 
+function activeBoost() {
+  if (!ballBoosted) {
+    ballBoosted = true;
+    ball.fillColor = "gold";
+    ballBoostTime = setTimeout(() => {
+      deactiveBoost();
+    }, 3000);
+  }
+}
+
+function deactiveBoost() {
+  ballBoosted = false;
+  ball.fillColor = "white";
+  clearTimeout(ballBoostTime);
+}
 function scoresLivesUpdate() {
   const scoresLives = document.querySelector(".ScoresLives");
   if (scoresLives) {
@@ -251,9 +333,14 @@ function scoresLivesUpdate() {
 
 function endGame() {
   if (lives <= 0) {
-    pass = false;
     go.style.display = "flex";
     cancelAnimationFrame(animationFrameId);
+    document.getElementById("gameOverScoreText").innerHTML =
+      "Your Score: <br>" + score;
+  } else if (brickArray.length <= 0) {
+    go.style.display = "flex";
+    cancelAnimationFrame(animationFrameId);
+    document.getElementById("gameOverh1").innerHTML = "You Win!";
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
   }
@@ -263,20 +350,5 @@ const restartButton = document.getElementById("restartButton");
 restartButton.addEventListener("click", restartGame);
 
 function restartGame() {
-  cancelAnimationFrame(animationFrameId);
-  animationFrameId = null;
-  score = 0;
-  lives = 3;
-  ball = new Ball(640, 504, 20, 20, 2);
-  board = new Board(640, 150, 50, 21);
-  ball.xSpeed=0;
-  ball.ySpeed=0;
-  ball.xSpeed=2;
-  ball.ySpeed=2;
-  createBrickContainer();
-  drawBricks();
-  brickArray = [];
-  createBrickContainer();
-  go.style.display = "none";
-  requestAnimationFrame(update);
+  window.location.reload();
 }
