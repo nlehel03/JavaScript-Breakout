@@ -35,25 +35,53 @@ body {
   font-size: xx-large;
 }
 #menu, #gameOver {
+  display: none;
+}
+
+#menu, #gameOver, #registration, #login {
   position: absolute;
   width: 40%;
   height: 80%;
   top: 10%;
   left: 30%;
-  display: none;
   visibility: visible;
   background-color: black;
   color: white;
   border: 1px solid white;
   z-index: 1000;
   justify-content: center;
+  padding: 0;
+  margin:0 auto;
 }
-#gameOverh1 {
+#menu{
+  visibility: hidden;
+}
+#usernameRegistration, #passwordRegistration, #passwordAgainRegistration, #usernameLogin, #passwordLogin{
+  width: 50%;
+  resize: none;
+  position: absolute;
+  left: 25%;
+  margin:0 auto;
+  padding: 0;
+
+}
+#usernameLogin, #usernameRegistration{
+  top:20%
+}
+#passwordLogin, #passwordRegistration{
+  top: 28%
+}
+#passwordAgainRegistration{
+  top: 36%;
+}
+#gameOverh1, #breakOuth1, #registrationh1, #loginh1 {
   position: absolute;
   text-align: center;
   top: 10%;
+  width: 100%;
+  margin: 0 auto;
 }
-#startButton, #restartButton {
+#startButton, #restartButton, #registrationButton, #loginButton, #scoreTableButton{
   position: absolute;
   width: 50%;
   height: 10%;
@@ -63,6 +91,15 @@ body {
   border-radius: 5px;
   color: white;
   font-size: large;
+  left:25%;
+}
+#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active {
+  background-color: white;
+  border-color: black;
+  color: black;
+}
+#scoreTableButton{
+  top:70%;
 }
 #gameOverScoreText {
   position: absolute;
@@ -77,4 +114,19 @@ body {
 #gitHub{
   position: absolute;
   bottom: 4%;
+}
+#errorDiv{
+  background-color: lightcoral;
+  border: 1px;
+  border-color: white;
+  border-radius: 3px;
+  width: 40%;
+  height: 5%;
+  position: absolute;
+  left:30%;
+  top:65%;
+  display: none; 
+}
+error.visible {
+  display: block; 
 }
