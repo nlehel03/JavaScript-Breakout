@@ -13,8 +13,8 @@
     </style>
 <?php
 
-$felhasznalonev="nlehel03";
-$jelszo="Anakin03";
+$felhasznalonev="";
+$jelszo="";
 $kapcsolati_szoveg="mysql:host=localhost;"
 $pdo = new PDO($kapcsolati_szoveg, $felhasznalonev, $jelszo);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
