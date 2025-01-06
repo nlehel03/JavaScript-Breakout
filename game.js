@@ -352,3 +352,38 @@ restartButton.addEventListener("click", restartGame);
 function restartGame() {
   window.location.reload();
 }
+
+function registrationForm(event) {
+  event.preventDefault();  
+  const reg = document.getElementById("registration");
+  const lo = document.getElementById("login");
+  if (reg && lo) {
+    reg.style.display  = 'block';
+    lo.style.display  = 'none' ;
+  }
+  else{
+    console.log("nincs ilyen");
+  }
+}
+
+function handleRegistrationResponse() {
+  const errorDivs = document.querySelectorAll('.errorDiv');
+  const errorMessage = '<?php echo htmlspecialchars($errorMessage); ?>'; 
+  if (errorMessage) {
+    errorDivs.forEach((errorDiv) => {
+      errorDiv.innerHTML = errorMessage;
+      errorDiv.classList.add('visible');
+    });
+  } else {
+    const registrationForm = document.getElementById('registration');
+    const loginForm = document.getElementById('login');
+    
+    registrationForm.style.display = 'none';  
+    loginForm.style.display = 'block'; 
+  }
+}
+
+window.onload = handleRegistrationResponse;
+
+
+

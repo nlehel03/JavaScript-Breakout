@@ -1,34 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Regisztráció</title>
+</head>
+<body>
 <?php
-    $errorMessage = "";
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $username = $_POST['usernameRegistration'];
-        $password = $_POST['passwordRegistration'];
-        $passwordAgain = $_POST['passwordAgainRegistration'];
+    session_start();
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    $errorMessage = '';
+    $successMessage = '';
 
-        if($password !==$passwordAgain)
-        {
-            $errorMessage = "Hiba! A két jelszó nem egyezik";
-            return;
-        }
-        else{
-            
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = $_POST['usernameRegistration'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $passwordAgain = $_POST['passwordAgainRegistration'] ?? '';
 
-            try {
-                $pdo = new PDO("mysql:host=localhost;dbname=jatek", "felhasznalo", "jelszo");
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if ($password === $passwordAgain) {
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);  
 
-                $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-                $stmt->execute([$username, $hashedPassword]);
+            $conn = new mysqli('mysql.caesar.elte.hu', 'nlehel03', 'QY5VrcbdeNmoN1p4', 'nlehel03');
+            /*if ($conn->connect_error) {
+                $errorMessage = "Csatlakozási hiba: " . $conn->connect_error;
+            } else {
+                $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+                $stmt->bind_param("ss", $username, $passwordHash);
 
-                echo "Sikeresen regisztráltál!";
-            } catch (PDOException $e) {
-                if ($e->getCode() == 23000) { 
-                    $errorMessage = "Hiba: A felhasználónév már foglalt!";
+                if ($stmt->execute()) {
+                    $successMessage = "Sikeres regisztráció! Jelentkezz be.";
+                    echo "Sikeres regisztráció! Jelentkezz be.";
+                    header("Location: login.php");
+                    exit(); // Fontos az exit!
                 } else {
-                    $errorMessage = "Hiba történt: " . $e->getMessage();
+                    $errorMessage = "Hiba történt: " . $stmt->error;
                 }
-            }
+
+                $stmt->close();
+                $conn->close();
+            }*/
+            echo "hello";
+        } else {
+            $errorMessage = "A két jelszó nem egyezik.";
         }
     }
 ?>
+    <div class="gameWindow">
+        <form id="registration" method="POST" action="">
+            <h1 id="registrationh1">Regisztráció</h1>
+            <input id="usernameRegistration" name="usernameRegistration" placeholder="Felhasználónév" required>
+            <input id="passwordRegistration" name="passwordRegistration" placeholder="Jelszó" type="password" required>
+            <input id="passwordAgainRegistration" name="passwordAgainRegistration" placeholder="Jelszó ismét" type="password" required>
+            <button id="registrationButton" type="submit">Regisztráció</button>
+        </form>
+
+        <?php if ($errorMessage): ?>
+            <div class="errorDiv"><?php echo htmlspecialchars($errorMessage); ?></div>
+        <?php endif; ?>
+        <?php if ($successMessage): ?>
+            <div class="successDiv"><?php echo htmlspecialchars($successMessage); ?></div>
+        <?php endif; ?>
+    </div>
+</body>
+</html>

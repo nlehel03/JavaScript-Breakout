@@ -1,3 +1,14 @@
+<?php
+  session_start();
+  require 'kapcsolat.php';
+  if (isset($_SESSION['errorMessage'])) {
+    $errorMessage = $_SESSION['errorMessage'];
+    unset($_SESSION['errorMessage']);
+}else {
+  $errorMessage = '';
+}
+$showLoginForm = isset($_SESSION['username']) && !empty($_SESSION['username']);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,28 +19,35 @@
     <title>Document</title>
   </head>
   <body>
-    <div class="gameWindow">
-      <div id="menu">
-        <h1 id="BreakOuth1">BreakOut</h1>
-        
-        <button id="startButton" onclick="startGame()">Start Game</button>
-        <button id="scoreTableButton" >Scores</button>
+    <?php if (!isset($_SESSION['username'])): ?>
+      <div class="gameWindow">
+          <div id="menu">
+            <h1 id="BreakOuth1">BreakOut</h1>
+            
+            <button id="startButton" onclick="startGame()">Start Game</button>
+            <button id="scoreTableButton" >Scores</button>
       </div>
-      <form id="login">
+    <?php else: ?>
+      <form id="login" method="POST" action="login.php">
         <h1 id="loginh1">Login</h1>
-        <textarea id="usernameLogin" placeholder="Username"></textarea>
-        <textarea id="passwordLogin" placeholder="Password" >Password</textarea>
-        <button id="loginButton">Login</button>
-      </form>
-      <form id="registration">
-        <h1 id="registrationh1">Registration</h1>
-        <textarea id="usernameRegistration" placeholder="Username"></textarea>
-        <textarea id="passwordRegistration" placeholder="Password"></textarea>
-        <textarea id="passwordAgainRegistration" placeholder="Password again"></textarea>
-        <button id="registrationButton">Registration</button>
-        <div class="error <?php if (!empty($errorMessage)) echo 'visible'; ?>" id="errorDiv">
+        <input id="usernameLogin" name="usernameLogin" placeholder="Username" ></input>
+        <input id="passwordLogin" name="passwordLogin" placeholder="Password" ></input>
+        <button id="loginButton" type="submit">Login</button>
+        <div class="errorDiv">
           <?php echo htmlspecialchars($errorMessage); ?>
-      </div>
+        </div>
+        <button id="registrationFormButton" onclick="registrationForm(event)">Registration</button>
+      </form>
+    <?php endif; ?>
+      <form id="registration" method="POST" action="registration.php">
+        <h1 id="registrationh1">Registration</h1>
+        <input id="usernameRegistration" name="usernameRegistration" placeholder="Username" required></input>
+        <input id="passwordRegistration" name="usernameRegistration" placeholder="Password" required></input>
+        <input id="passwordAgainRegistration" name="passwordAgainRegistration" placeholder="Password again" required></input>
+        <button id="registrationButton" type="submit">Registration</button>
+        <div class="errorDiv">
+          <?php echo htmlspecialchars($errorMessage); ?>
+        </div>
       </form>
       
       

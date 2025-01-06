@@ -34,10 +34,9 @@ body {
   z-index: 100;
   font-size: xx-large;
 }
-#menu, #gameOver {
+#gameOver{
   display: none;
 }
-
 #menu, #gameOver, #registration, #login {
   position: absolute;
   width: 40%;
@@ -53,11 +52,9 @@ body {
   padding: 0;
   margin:0 auto;
 }
-#menu{
-  visibility: hidden;
-}
 #usernameRegistration, #passwordRegistration, #passwordAgainRegistration, #usernameLogin, #passwordLogin{
   width: 50%;
+  height: 5%;
   resize: none;
   position: absolute;
   left: 25%;
@@ -81,7 +78,7 @@ body {
   width: 100%;
   margin: 0 auto;
 }
-#startButton, #restartButton, #registrationButton, #loginButton, #scoreTableButton{
+#startButton, #restartButton, #registrationButton, #loginButton, #scoreTableButton, #registrationFormButton{
   position: absolute;
   width: 50%;
   height: 10%;
@@ -93,12 +90,15 @@ body {
   font-size: large;
   left:25%;
 }
-#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active {
+#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active{
   background-color: white;
   border-color: black;
   color: black;
 }
-#scoreTableButton{
+/*#registration{
+  display: none;
+}*/
+#scoreTableButton, #registrationFormButton{
   top:70%;
 }
 #gameOverScoreText {
@@ -115,11 +115,11 @@ body {
   position: absolute;
   bottom: 4%;
 }
-#errorDiv{
-  background-color: lightcoral;
+.errorDiv{
+  /*background-color: lightcoral;
   border: 1px;
   border-color: white;
-  border-radius: 3px;
+  border-radius: 3px;*/
   width: 40%;
   height: 5%;
   position: absolute;
@@ -127,6 +127,6 @@ body {
   top:65%;
   display: none; 
 }
-error.visible {
+.errorDiv.visible {
   display: block; 
 }

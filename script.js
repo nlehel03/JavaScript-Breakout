@@ -31,3 +31,4 @@ for (let i = 0; i < 40; i++) {
     ctx.fillRect(x, y, kockaSzelesseg, kockaMagassag); // Kocka kirajzolása
   }
 }
+
