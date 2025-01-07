@@ -152,10 +152,15 @@ window.onload = function () {
   go = document.getElementById("gameOver");
 };
 function startGame() {
-  menu.style.display = "none";
-  requestAnimationFrame(update);
-  document.addEventListener("keydown", (e) => board.move(e));
-  scoresLivesUpdate();
+  const menu = document.getElementById("menu"); 
+  if (menu){
+    menu.style.display = "none";
+    requestAnimationFrame(update);
+    document.addEventListener("keydown", (e) => board.move(e));
+    scoresLivesUpdate();
+  }else{
+    console.error("A menu elem nem található");
+  }
 }
 
 function createBrickContainer() {
@@ -337,15 +342,38 @@ function endGame() {
     cancelAnimationFrame(animationFrameId);
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
+    saveScore();
   } else if (brickArray.length <= 0) {
     go.style.display = "flex";
     cancelAnimationFrame(animationFrameId);
     document.getElementById("gameOverh1").innerHTML = "You Win!";
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
+      saveScore();
   }
 }
 
+function saveScore()
+{
+  var username = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
+  if(username !=='')
+  {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "save.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("username=" + encodeURIComponent(username)  +"&score=" + encodeURIComponent(score)+ "&game_status=finished");
+    xhr.onload = function() {
+      console.log(xhr.status);
+      if (xhr.status == 200) {
+          console.log("Játék eredmény mentése sikeres!");
+      } else {
+          console.log("Hiba történt a játék eredmény mentésekor."+xhr.status);
+      }
+    };
+  } else {
+    console.log("Nincs bejelentkezett felhasználó.");
+  }
+}
 const restartButton = document.getElementById("restartButton");
 restartButton.addEventListener("click", restartGame);
 
@@ -355,35 +383,12 @@ function restartGame() {
 
 function registrationForm(event) {
   event.preventDefault();  
-  const reg = document.getElementById("registration");
-  const lo = document.getElementById("login");
-  if (reg && lo) {
-    reg.style.display  = 'block';
-    lo.style.display  = 'none' ;
-  }
-  else{
-    console.log("nincs ilyen");
-  }
+  window.location.href = 'registration.php';
 }
-
-function handleRegistrationResponse() {
-  const errorDivs = document.querySelectorAll('.errorDiv');
-  const errorMessage = '<?php echo htmlspecialchars($errorMessage); ?>'; 
-  if (errorMessage) {
-    errorDivs.forEach((errorDiv) => {
-      errorDiv.innerHTML = errorMessage;
-      errorDiv.classList.add('visible');
-    });
-  } else {
-    const registrationForm = document.getElementById('registration');
-    const loginForm = document.getElementById('login');
-    
-    registrationForm.style.display = 'none';  
-    loginForm.style.display = 'block'; 
-  }
+function loginForm(event) {
+  event.preventDefault();  
+  window.location.href = 'login.php';
 }
-
-window.onload = handleRegistrationResponse;
 
 
 

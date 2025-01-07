@@ -78,7 +78,7 @@ body {
   width: 100%;
   margin: 0 auto;
 }
-#startButton, #restartButton, #registrationButton, #loginButton, #scoreTableButton, #registrationFormButton{
+#startButton, #restartButton, #registrationButton, #loginButton, #scoreTableButton, #registrationFormButton, #loginFormButton{
   position: absolute;
   width: 50%;
   height: 10%;
@@ -90,7 +90,7 @@ body {
   font-size: large;
   left:25%;
 }
-#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active{
+#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active, #loginFormButton:active{
   background-color: white;
   border-color: black;
   color: black;
@@ -98,7 +98,7 @@ body {
 /*#registration{
   display: none;
 }*/
-#scoreTableButton, #registrationFormButton{
+#scoreTableButton, #registrationFormButton, #loginFormButton{
   top:70%;
 }
 #gameOverScoreText {
@@ -115,18 +115,9 @@ body {
   position: absolute;
   bottom: 4%;
 }
-.errorDiv{
-  /*background-color: lightcoral;
-  border: 1px;
-  border-color: white;
-  border-radius: 3px;*/
-  width: 40%;
-  height: 5%;
-  position: absolute;
-  left:30%;
-  top:65%;
-  display: none; 
-}
-.errorDiv.visible {
-  display: block; 
+#registrationForm{
+  width: 100%;
+  height: 100%;
+  margin:0;
+  padding: 0;
 }
