@@ -349,31 +349,34 @@ function endGame() {
     document.getElementById("gameOverh1").innerHTML = "You Win!";
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
-      saveScore();
+      var username = 'exampleUser'; // Replace with the actual username
+      score = 100; // Replace with the actual score
+      saveScore(username,score);
   }
 }
 
-function saveScore()
+function saveScore(username,score)
 {
-  var username = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
-  if(username !=='')
-  {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "save.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send("username=" + encodeURIComponent(username)  +"&score=" + encodeURIComponent(score)+ "&game_status=finished");
-    xhr.onload = function() {
-      console.log(xhr.status);
-      if (xhr.status == 200) {
-          console.log("Játék eredmény mentése sikeres!");
-      } else {
-          console.log("Hiba történt a játék eredmény mentésekor."+xhr.status);
-      }
-    };
-  } else {
-    console.log("Nincs bejelentkezett felhasználó.");
-  }
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'save.php', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  var data = 'username=' + encodeURIComponent(username) + '&score=' + encodeURIComponent(score);
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+        // siker!
+        console.log(xhr.responseText);
+    } else {
+        // hiba
+        console.error('Error: ' + xhr.status);
+    }
+  };
+  xhr.onerror = function () {
+    console.error('Request failed');
+  };
+  xhr.send(data);
 }
+
+
 const restartButton = document.getElementById("restartButton");
 restartButton.addEventListener("click", restartGame);
 
