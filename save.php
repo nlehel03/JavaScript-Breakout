@@ -8,18 +8,37 @@
         if ($conn->connect_error) {
             die("Csatlakozási hiba: " . $conn->connect_error);
         }
-        $username = $_POST['username'];
+        $username = $conn->real_escape_string($_POST['username']);
         $score = $_POST['score'];
 
-        $stmt = $conn->prepare("INSERT INTO scores (username, score, create_at) VALUES (?, ?, NOW())");
-        $stmt->bind_param("si", $username, $score);
-        if ($stmt->execute()) {
-            echo "sikeres mentés!";
-        } else {
-            echo "mentnés sikertelen: " . $stmt->error;
+        $user_check_query = "SELECT username FROM users WHERE username = '$username'";
+        $user_check_result = $conn->query($user_check_query);
+
+        if ($user_check_result === false) {
+            die("User check query failed: " . $conn->error);
         }
-        $stmt->close();
+        
+        if ($user_check_result->num_rows > 0) {
+            $stmt = $conn->prepare("INSERT INTO scores (username, score, created_at) VALUES (?, ?, NOW())");
+
+            if ($stmt === false) {
+                die("Prepare failed: " . $conn->error);
+            }
+
+            $stmt->bind_param("si", $username, $score);
+
+            if ($stmt->execute()) {
+                echo "sikeres mentés!";
+            } else {
+                echo "mentés sikertelen: " . $stmt->error;
+            }
+
+            $stmt->close();
+        } else {
+                echo "Nincs ilyen felhasználó!";
+        }
         $conn->close();
+        
     }else {
         echo "Invalid kérés.";
     }

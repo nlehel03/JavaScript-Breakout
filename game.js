@@ -342,7 +342,9 @@ function endGame() {
     cancelAnimationFrame(animationFrameId);
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
-    saveScore();
+      var username = 'exampleUser'; 
+      score = 100;
+      saveScore(username,score);
   } else if (brickArray.length <= 0) {
     go.style.display = "flex";
     cancelAnimationFrame(animationFrameId);
