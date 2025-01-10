@@ -30,7 +30,7 @@
             <h1 id="BreakOuth1">BreakOut</h1>
             
             <button id="startButton" onclick="startGame()">Start Game</button>
-            <button id="scoreTableButton" >Scores</button>
+            <button id="scoreTableButton" onclick="window.location.href='toplist.php'">Scores</button>
         </div>
         <canvas id="gameCanvas" width="1280" height="720"></canvas>
         <div class="ScoresLives">Scores: 0<br>Lives: 3</div>

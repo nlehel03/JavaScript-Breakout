@@ -9,7 +9,9 @@
   </head>
   <body>
     <?php
-      session_start();
+      if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+      }
       error_reporting(E_ALL);
       ini_set('display_errors', 1);
       $errorMessage = '';
@@ -24,18 +26,19 @@
           $stmt->bind_param("s", $username);
           $stmt->execute();
           $stmt->bind_result($storedPasswordHash);
-
-          if ($stmt->fetch()) {
-            if (password_verify($password, $storedPasswordHash)) {
-              $_SESSION['username'] = $username; 
-              header("Location: index.php"); 
-              exit();
+            if ($stmt->fetch()) {
+                if (password_verify($password, $storedPasswordHash)) {
+                  $_SESSION['username'] = $username;
+                  session_write_close();
+                  header("Location: index.php");
+                  exit();
+                } else {
+                  $errorMessage = "Hibás jelszó.";
+                }
             } else {
-              $errorMessage = "Hibás jelszó.";
+              $errorMessage = "A felhasználónév nem létezik.";
             }
-          } else {
-            $errorMessage = "A felhasználónév nem létezik.";
-          }
+          $stmt->close();
         }
         $conn->close();
       }

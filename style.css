@@ -9,7 +9,7 @@ body {
 .gameWindow {
   position: absolute;
   top:5%;
-  left:17;
+  left:15%;
   width: 1280px;
   height: 720px;
   background-color: black;
@@ -37,7 +37,7 @@ body {
 #gameOver{
   display: none;
 }
-#menu, #gameOver, #registration, #login {
+#menu, #gameOver, #registration, #login{
   position: absolute;
   width: 40%;
   height: 80%;
@@ -90,10 +90,22 @@ body {
   font-size: large;
   left:25%;
 }
-#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active, #loginFormButton:active{
+#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active, #loginFormButton:active, .menuButton:active{
   background-color: white;
   border-color: black;
   color: black;
+}
+.menuButton{
+  position: absolute;
+  width: 50%;
+  height: 10%;
+  top: 85%;
+  left:25%;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
+  font-size: large;
 }
 /*#registration{
   display: none;
@@ -121,3 +133,87 @@ body {
   margin:0;
   padding: 0;
 }
+
+.resultsH1Div{
+  position: absolute;
+  width: 100%;
+  height: 15%;
+  top:0;
+  left: 0;
+  text-align: center;
+}
+
+.resultTable{
+  border-collapse: collapse;
+  font-size: 14x;
+  width: 100%;
+}
+
+.resultTable th{
+  background-color: white;
+  color: black;
+  text-align: center;
+  position: sticky;
+  top:0;
+}
+
+.resultTable th, .resultTable td{
+  padding: 6px 8px;
+  font-weight: normal;
+}
+
+.scrollable-table{
+  height: 65%;
+  overflow-y: auto;
+  position: absolute;
+  top:15%;
+  border: 1px solid white;
+}
+
+
+
+
+
+
+
+
+
+/*
+
+.resultTable{
+  position: absolute;
+  background-color: black;
+  color: white;
+  width: 80%;
+  height: 70%;
+  border: 1px solid white;
+  top: 20%;
+  Left:10%;
+  text-align: center;
+  border-collapse: collapse;
+}
+.resultTable th{
+  position: sticky;
+  background-color: white;
+  color:black;
+  height: 15%;
+  padding: 0;
+  top:0;
+}
+.resultTable td{
+  position: sticky;
+  height: 20%;
+}
+.resultTable tr{
+  scroll-snap-align: start;
+}
+
+.scrollable-table{
+  height: 70%;
+  width: 80%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+.scrollable-table > .resultTable{
+  width: 100%;
+}*/

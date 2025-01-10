@@ -342,22 +342,18 @@ function endGame() {
     cancelAnimationFrame(animationFrameId);
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
-      var username = 'exampleUser'; 
-      score = 100;
-      saveScore(username,score);
+      saveScore();
   } else if (brickArray.length <= 0) {
     go.style.display = "flex";
     cancelAnimationFrame(animationFrameId);
     document.getElementById("gameOverh1").innerHTML = "You Win!";
     document.getElementById("gameOverScoreText").innerHTML =
       "Your Score: <br>" + score;
-      var username = 'exampleUser'; // Replace with the actual username
-      score = 100; // Replace with the actual score
-      saveScore(username,score);
+      saveScore();
   }
 }
 
-function saveScore(username,score)
+function saveScore()
 {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'save.php', true);
