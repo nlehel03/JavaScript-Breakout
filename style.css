@@ -90,12 +90,12 @@ body {
   font-size: large;
   left:25%;
 }
-#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active, #loginFormButton:active, .menuButton:active{
+#startButton:active, #restartButton:active, #registrationButton:active, #loginButton:active, #scoreTableButton:active ,#registrationFormButton:active, #loginFormButton:active, .menuButton:active,  #logoutButton:active{
   background-color: white;
   border-color: black;
   color: black;
 }
-.menuButton{
+.menuButton, #logoutButton{
   position: absolute;
   width: 50%;
   height: 10%;
